@@ -14,20 +14,21 @@ export interface iFirebaseRepository {
   latestData: (dayStamp: string) => Promise<void>;
 }
 
-const mail = '';
-const pass = '';
-const collectionPath = '';
-const subCollectionPath = '';
+// reactで.envファイルを使う際は頭にREACT_APP_が必須
+const mail = process.env.REACT_APP_EMAIL;
+const pass = process.env.REACT_APP_PASS;
+const collectionPath = process.env.REACT_APP_COLLECTION_PATH;
+const subCollectionPath = process.env.REACT_APP_SUB_COLLECTION_PATH;
 
 export class FirebaseRepository implements iFirebaseRepository{
   constructor() {
   }
 
   async latestData(dayStamp: string){
-    await signInWithEmailAndPassword(auth, mail, pass).then((user)=> {
+    await signInWithEmailAndPassword(auth, mail!, pass!).then((user)=> {
       console.log(user.user)
     });
-    const dataCollectionRef = collection(db, collectionPath, dayStamp, subCollectionPath);
+    const dataCollectionRef = collection(db, collectionPath!, dayStamp, subCollectionPath!);
     const snapshot = await getDocs(dataCollectionRef);
     const data: RoomData[] =[];
     snapshot.forEach((s) => {
