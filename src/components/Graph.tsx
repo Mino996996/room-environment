@@ -1,36 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {onValue, ref} from "firebase/database";
-import {db} from "../modules/firebase";
+import React from "react";
 import Chart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
 
-type Prop = {
-  path: string
+type Props = {
+  data: number[],
+  xItems: string[],
+  color: string,
+  label: string
 }
 
-type RoomData = {
-  time: string,
-  air: number,
-  co2: number,
-  temperature: number,
-  humidity: number
-}
-
-export const Graph: React.FC = () => {
-
-  // const dbRef = ref(db, path);
-  // const [roomData, setRoomData] = useState<RoomData[]>([]);
-  //
-  // useEffect(()=>{
-  //   onValue(dbRef, (snapshot) => {
-  //     const data = snapshot.val() as RoomData[];
-  //     setRoomData(data);
-  //   });
-  // }, [path]);
-  //
-  // const createArrayData = (data: RoomData[]) => {
-  //
-  // }
+export const Graph: React.FC<Props> = (prop) => {
 
   const options: ApexOptions = {
     chart: {
@@ -60,14 +39,14 @@ export const Graph: React.FC = () => {
     //   title: { text: "Value" }
     // }
     xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+      categories: prop.xItems
     }
   };
   const series: ApexAxisChartSeries | ApexNonAxisChartSeries = [
     {
-      name: "series-1",
-      color: '#66DA26',
-      data: [30, 40, 45, 50, 49, 60, 70, 91]
+      name: prop.label,
+      color: prop.color,
+      data: prop.data
     }
   ];
 
