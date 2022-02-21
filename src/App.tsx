@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Graph} from "./components/Graph";
 import {onValue, ref} from "firebase/database";
 import {db} from "./modules/firebase";
+import Chart from "react-apexcharts";
+import {ApexOptions} from "apexcharts";
 
 type RoomData = {
   time: string,
@@ -46,42 +47,64 @@ const App: React.FC = () => {
       }
     },60000);
 
-    return  () => {
-      clearInterval(timer);
-      console.log("end");
-    };
-  },[]);
-
-  useEffect(()=>{
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val() as RoomData[];
-      // setRoomData(data);
       createArrayData(Object.values(data));
     });
-    return () => {
+
+    return  () => {
+      clearInterval(timer);
       setCo2Data([]);
       setAirData([]);
       setTempData([]);
       setHumidData([]);
       setTimeData([]);
+      console.log("end");
     };
-  }, [todayStamp]);
+  },[todayStamp]);
 
+  const options: ApexOptions = {
+    chart: {
+      zoom: {
+        enabled: false
+      },
+      animations: {
+        easing: "linear",
+        dynamicAnimation: {
+          speed: 500
+        }
+      },
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    xaxis: {
+      categories: timeData
+    }
+  };
 
   return (
-    <>
+    <div className="max-h-screen">
       <h1 className="text-3xl font-bold underline text-red-400">
         107 Room Condition
       </h1>
-      <div className="h-1/4">
-        <Graph label={"CO2"} data={co2Data} color={'#FF9800'} xItems={timeData}/>
+      <div className="m-1 font-bold">
+        <h2>CO2[ppm]</h2>
+        <Chart type="line" options={options} series={[{name: "CO2", color: '#FF9800',data: co2Data}]} height={"300"} />
       </div>
-
-      <Graph label={"Air Dust"} data={airData} color={'#546E7A'} xItems={timeData}/>
-      <Graph label={"Temperature"} data={tempData} color={'#66DA26'} xItems={timeData}/>
-      <Graph label={"Humidity"} data={humidData} color={'#2E93fA'} xItems={timeData}/>
-    </>
-
+      <div className="m-1 font-bold">
+        <h2>Air Dust[/cf]</h2>
+        <Chart type="line" options={options} series={[{name: "Air Dust", color: '#546E7A',data: airData}]} height={"300"} />
+      </div>
+      <div className="m-1 font-bold">
+        <h2>Temperature[℃]</h2>
+        <Chart type="line" options={options} series={[{name: "Temperature", color: '#66DA26',data: tempData}]} height={"300"} />
+      </div>
+      <div className="m-1 font-bold">
+        <h2>Humidity[%]</h2>
+        <Chart type="line" options={options} series={[{name: "Humidity", color: '#2E93fA',data: humidData}]} height={"300"} />
+      </div>
+    </div>
   );
 }
 

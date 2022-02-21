@@ -21,23 +21,11 @@ export const Graph: React.FC<Props> = (prop) => {
         dynamicAnimation: {
           speed: 500
         }
-      }
+      },
     },
-    // tooltip: {
-    //   x: {
-    //     format: "yyyy/MM/dd HH:mm:ss.f"
-    //   }
-    // },
-    // xaxis: {
-    //   type: "datetime",
-    //   range: 24*60*60*1000
-    // },
-    // yaxis: {
-    //   labels: {
-    //     formatter: val => val.toFixed(0)
-    //   },
-    //   title: { text: "Value" }
-    // }
+    stroke: {
+      curve: 'smooth'
+    },
     xaxis: {
       categories: prop.xItems
     }
@@ -50,5 +38,10 @@ export const Graph: React.FC<Props> = (prop) => {
     }
   ];
 
-  return <Chart type="line" options={options} series={series} />;
+  return (
+    <div className="m-3">
+      <Chart type="line" options={options} series={series} height={"300"} />
+    </div>
+
+  );
 }
