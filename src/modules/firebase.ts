@@ -1,8 +1,7 @@
 import { initializeApp } from "firebase/app";
 //Firebase ver9 compliant
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getAuth} from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
 const firebaseApp = initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -14,7 +13,5 @@ const firebaseApp = initializeApp({
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 });
 //Firebase ver9 compliant
-export const storage = getStorage(firebaseApp);
 export const auth = getAuth(firebaseApp);
-export const db = getFirestore(firebaseApp);
-export const googleAuthProvider = new GoogleAuthProvider();
+export const db = getDatabase(firebaseApp);

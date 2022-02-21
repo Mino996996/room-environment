@@ -1,4 +1,4 @@
-import {collection, query, where, getDocs, doc, getDoc} from "firebase/firestore";
+import { ref, onValue } from "firebase/database";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import {auth, db} from "../../modules/firebase";
 
@@ -25,23 +25,28 @@ export class FirebaseRepository implements iFirebaseRepository{
   }
 
   async latestData(dayStamp: string){
-    await signInWithEmailAndPassword(auth, mail!, pass!).then((user)=> {
-      console.log(user.user)
+    // await signInWithEmailAndPassword(auth, mail!, pass!).then((user)=> {
+    //   console.log(user.user)
+    // });
+    // const dataCollectionRef = collection(db, collectionPath!, dayStamp, subCollectionPath!);
+    // const snapshot = await getDocs(dataCollectionRef);
+    // const data: RoomData[] =[];
+    // snapshot.forEach((s) => {
+    //   const singleData: RoomData = {
+    //     time: s.id,
+    //     air: s.data().air,
+    //     co2: s.data().co2,
+    //     humidity: s.data().humidity,
+    //     temperature: s.data().temperature
+    //   };
+    //   data.push(singleData);
+    // });
+    const dbRef = ref(db, '2022-02-21');
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
     });
-    const dataCollectionRef = collection(db, collectionPath!, dayStamp, subCollectionPath!);
-    const snapshot = await getDocs(dataCollectionRef);
-    const data: RoomData[] =[];
-    snapshot.forEach((s) => {
-      const singleData: RoomData = {
-        time: s.id,
-        air: s.data().air,
-        co2: s.data().co2,
-        humidity: s.data().humidity,
-        temperature: s.data().temperature
-      };
-      data.push(singleData);
-    });
-    console.log(data.length);
-    console.log(data);
+    // console.log(data.length);
+
   }
 }
