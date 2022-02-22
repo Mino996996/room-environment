@@ -23,12 +23,15 @@ const checkDayStamp = (nowDate: Date): string => {
 const App: React.FC = () => {
 
   const [todayStamp, setTodayStamp] = useState<string>(checkDayStamp(new Date()));
-  const dbRef = ref(db, todayStamp);
   const [co2Data, setCo2Data] = useState<number[]>([]);
   const [airData, setAirData] = useState<number[]>([]);
   const [tempData, setTempData] = useState<number[]>([]);
   const [humidData, setHumidData] = useState<number[]>([]);
   const [timeData, setTimeData] = useState<string[]>([]);
+
+  const dbRef = ref(db, todayStamp);
+
+
 
   // 各データを更新する
   const createArrayData = (data: RoomData[]): void => {
@@ -74,17 +77,38 @@ const App: React.FC = () => {
           speed: 500
         }
       },
+      dropShadow: {
+        enabled: true,
+        color: '#000',
+        top: 18,
+        left: 7,
+        blur: 10,
+        opacity: 0.2
+      },
     },
     stroke: {
       curve: 'smooth'
     },
     xaxis: {
-      categories: timeData
+      type: 'category',
+      // categories: timeData,
+      overwriteCategories: timeData,
+      title: {
+        text: 'Time'
+      }
+    },
+    yaxis: {
+      labels: {
+        minWidth: 80,
+        // formatter(val: number): string | string[] {
+        //   return val.toFixed(2);
+        // }
+      }
     }
   };
 
   return (
-    <div className="max-h-screen">
+    <div className="max-h-screen m-3">
       <h1 className="text-3xl font-bold underline text-red-400">
         107 Room Condition
       </h1>
